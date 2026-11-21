@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffc2d4">
+<title>for mommy 💖</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    font-family: 'Quicksand', sans-serif;
+    color: #5a1030;
+    background: linear-gradient(135deg, #ffd3e0, #ffc2d4 35%, #e7b7f0 70%, #c9b6f5);
+    overflow-x: hidden;
+  }
+  .script { font-family: 'Pacifico', cursive; color: #d63384; font-weight: 400; }
+  .hidden { display: none !important; }
+
+  /* ---------- floating hearts background ---------- */
+  #hearts-bg { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .bg-heart { position: absolute; bottom: -12vh; animation: floatUp linear infinite; will-change: transform; }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) translateX(0) rotate(-8deg); }
+    50%  { transform: translateY(-60vh) translateX(26px) rotate(6deg); }
+    100% { transform: translateY(-125vh) translateX(-18px) rotate(14deg); }
+  }
+
+  /* ---------- lock screen ---------- */
+  #lock-screen {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    transition: opacity .6s ease, visibility .6s;
+  }
+  #lock-screen.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+  .lock-card {
+    width: 100%; max-width: 360px;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 28px;
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(214,51,132,.25);
+  }
+  .lock-heart { font-size: 52px; animation: beat 1.4s infinite; }
+  @keyframes beat {
+    0%,100% { transform: scale(1); } 25% { transform: scale(1.18); }
+    40% { transform: scale(.97); } 60% { transform: scale(1.1); }
+  }
+  .lock-card h1 { font-size: 2.3rem; margin: 8px 0 4px; }
+  .hint { margin: 0 0 6px; font-size: .95rem; font-weight: 600; color: #7a2a50; }
+
+  .dots { display: flex; gap: 14px; justify-content: center; margin: 18px 0 4px; }
+  .dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid #d63384; transition: all .15s;
+  }
+  .dot.filled { background: #d63384; transform: scale(1.15); box-shadow: 0 0 10px rgba(214,51,132,.5); }
+  .dots.error { animation: shake .45s; }
+  .dots.error .dot { border-color: #e03131; background: #e03131; }
+  @keyframes shake {
+    10%,90% { transform: translateX(-2px); } 20%,80% { transform: translateX(4px); }
+    30%,50%,70% { transform: translateX(-7px); } 40%,60% { transform: translateX(7px); }
+  }
+  .lock-msg { min-height: 1.5em; margin: 8px 0; font-size: .92rem; font-weight: 700; color: #a61e4d; }
+
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+  .key {
+    font-family: inherit; font-weight: 700; font-size: 1.35rem;
+    padding: 14px 0; border-radius: 18px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.85); color: #7a1f4d;
+    box-shadow: 0 4px 14px rgba(214,51,132,.15);
+    transition: transform .12s, background .12s;
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  }
+  .key:hover { background: #fff; transform: translateY(-2px); }
+  .key:active { transform: scale(.92); background: #ffd6e7; }
+  .key.fn { font-size: 1.05rem; background: rgba(255,214,231,.85); }
+
+  /* ---------- hub ---------- */
+  #hub { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 48px 20px 60px; text-align: center; }
+  #hub header { animation: rise .7s both; }
+  #hub h1 { font-size: clamp(1.9rem, 5vw, 2.7rem); margin: 0 0 6px; }
+  .subtitle { margin: 0; font-weight: 600; color: #7a2a50; }
+  .top-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .chip {
+    background: rgba(255,255,255,.65); border: 1px solid rgba(255,255,255,.8);
+    border-radius: 999px; padding: 8px 16px; font-weight: 700; color: #a61e4d; font-size: .9rem;
+  }
+  button.chip { font-family: inherit; cursor: pointer; transition: transform .12s; }
+  button.chip:hover { transform: translateY(-2px); background: #fff; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; margin-top: 36px; }
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    background: rgba(255,255,255,.6);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 24px; padding: 28px 22px;
+    box-shadow: 0 10px 30px rgba(214,51,132,.15);
+    transition: transform .25s, box-shadow .25s, background .25s;
+    animation: rise .6s both;
+  }
+  .card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 40px rgba(214,51,132,.3); background: rgba(255,255,255,.82); }
+  .card .emoji { font-size: 44px; }
+  .card h3 { margin: 10px 0 6px; font-size: 1.25rem; color: #d63384; }
+  .card p { margin: 0; font-size: .95rem; color: #7a2a50; font-weight: 500; }
+  .card .go { display: inline-block; margin-top: 14px; font-weight: 700; color: #d63384; }
+  @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+  #hub footer { margin-top: 50px; font-weight: 700; color: #a61e4d; animation: rise .8s .3s both; }
+
+  /* ---------- heart burst on unlock ---------- */
+  .burst-heart {
+    position: fixed; left: 50%; top: 50%; z-index: 100; pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: burst .95s ease-out forwards;
+  }
+  @keyframes burst {
+    to { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(var(--s)) rotate(var(--r)); opacity: 0; }
+  }
+
+  @media (max-width: 420px) {
+    .lock-card { padding: 26px 18px; }
+    .key { padding: 12px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="hearts-bg" aria-hidden="true"></div>
+
+<!-- 🔒 LOCK SCREEN -->
+<section id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-heart">💝</div>
+    <h1 class="script">for u</h1>
+    <p class="hint">enter our secret code to open ur little world 💌</p>
+    <div id="dots" class="dots" aria-hidden="true"></div>
+    <p id="lock-msg" class="lock-msg" aria-live="polite">&nbsp;</p>
+    <div id="keypad" class="keypad"></div>
+  </div>
+</section>
+
+<!-- 💖 THE HUB -->
+<main id="hub" class="hidden">
+  <header>
+    <h1 class="script">welcome home, <span id="her-name"></span> 💖</h1>
+    <p class="subtitle">every page here is a little piece of my heart, made just for u</p>
+    <div class="top-chips">
+      <span id="days-chip" class="chip hidden"></span>
+      <button id="lock-btn" class="chip" type="button">🔒 lock</button>
+    </div>
+  </header>
+  <section id="cards" class="cards"></section>
+  <footer>made with ❤️ by <span id="your-name"></span></footer>
+</main>
+
+<script>
+/* ============================================================
+   💗 EDIT EVERYTHING HERE — this is the only part u need to touch
+   ============================================================ */
+const CONFIG = {
+  pin: "1106",              // 🔒 ur secret code
+  herName: "mommy 🥰💗",    // → "welcome home, mommy 🥰💗 💖"
+  yourName: "ur person",    // footer signature
+  hint: "",                 // optional clue after 2 wrong tries, e.g. "a date that matters to us 😉"
+  anniversary: null,        // optional "YYYY-MM-DD" → shows "💞 X days of us"
+  openInNewTab: true,       // pages open in a new tab so the hub stays open
+
+  links: [
+    { emoji: "💌", title: "11 love", desc: "where it all began — the first thing i made u", url: "https://itsme0kjhgf.github.io/11love/" },
+
+    // ⬇️ ADD MORE PAGES LATER — copy this line, remove the //, fill it in:
+    // { emoji: "📸", title: "our memories", desc: "all our favorite moments", url: "https://your-link-here.com" },
+  ],
+};
+/* ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const pin = String(CONFIG.pin);
+let entry = "", checking = false, fails = 0;
+
+/* ---- dots ---- */
+const dotsEl = $("dots");
+for (let i = 0; i < pin.length; i++) {
+  const d = document.createElement("span");
+  d.className = "dot";
+  dotsEl.appendChild(d);
+}
+const renderDots = () => [...dotsEl.children].forEach((d, i) => d.classList.toggle("filled", i < entry.length));
+const msg = t => $("lock-msg").textContent = t || "\u00A0";
+
+/* ---- pin logic ---- */
+function press(k) {
+  if (checking || $("lock-screen").classList.contains("gone")) return;
+  if (k === "C") { entry = ""; renderDots(); return; }
+  if (k === "B") { entry = entry.slice(0, -1); renderDots(); return; }
+  if (entry.length >= pin.length) return;
+  entry += k;
+  renderDots();
+  if (entry.length === pin.length) { checking = true; setTimeout(check, 220); }
+}
+
+function check() {
+  if (entry === pin) { unlock(); return; }
+  fails++;
+  dotsEl.classList.add("error");
+  msg(fails >= 2 && CONFIG.hint ? CONFIG.hint : "that's not our code, try again 🥺");
+  if (navigator.vibrate) navigator.vibrate(180);
+  setTimeout(() => {
+    dotsEl.classList.remove("error");
+    entry = ""; renderDots(); checking = false;
+  }, 500);
+}
+
+function unlock() {
+  burstHearts();
+  msg("i knew it was you 💖");
+  setTimeout(() => {
+    $("lock-screen").classList.add("gone");
+    $("hub").classList.remove("hidden");
+    entry = ""; renderDots(); msg(""); checking = false; fails = 0;
+    window.scrollTo(0, 0);
+  }, 700);
+}
+
+$("lock-btn").addEventListener("click", () => {
+  $("hub").classList.add("hidden");
+  $("lock-screen").classList.remove("gone");
+  entry = ""; renderDots(); msg("");
+});
+
+/* ---- keypad ---- */
+["1","2","3","4","5","6","7","8","9","C","0","B"].forEach(k => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "key" + (k === "C" || k === "B" ? " fn" : "");
+  b.textContent = k === "B" ? "⌫" : k;
+  b.setAttribute("aria-label", k === "B" ? "delete" : k === "C" ? "clear" : k);
+  b.addEventListener("click", () => press(k));
+  $("keypad").appendChild(b);
+});
+
+/* ---- keyboard support ---- */
+document.addEventListener("keydown", e => {
+  if ($("lock-screen").classList.contains("gone")) return;
+  if (/^[0-9]$/.test(e.key)) press(e.key);
+  else if (e.key === "Backspace") press("B");
+  else if (e.key === "Escape" || e.key === "Delete") press("C");
+});
+
+/* ---- build the hub ---- */
+$("her-name").textContent = CONFIG.herName;
+$("your-name").textContent = CONFIG.yourName;
+
+if (CONFIG.anniversary) {
+  const start = new Date(CONFIG.anniversary + "T00:00:00");
+  if (!isNaN(start)) {
+    const days = Math.floor((Date.now() - start.getTime()) / 86400000);
+    if (days >= 0) {
+      $("days-chip").textContent = "💞 " + days + " days of us";
+      $("days-chip").classList.remove("hidden");
+    }
+  }
+}
+
+const cardsEl = $("cards");
+CONFIG.links.forEach((l, i) => {
+  const a = document.createElement("a");
+  a.className = "card";
+  a.href = l.url;
+  if (CONFIG.openInNewTab) { a.target = "_blank"; a.rel = "noopener"; }
+  a.style.animationDelay = (i * 0.09) + "s";
+  a.innerHTML = '<div class="emoji">' + l.emoji + '</div><h3></h3><p></p><span class="go">open →</span>';
+  a.querySelector("h3").textContent = l.title;
+  a.querySelector("p").textContent = l.desc;
+  cardsEl.appendChild(a);
+});
+if (!CONFIG.links.length) {
+  cardsEl.innerHTML = '<div class="card"><div class="emoji">💗</div><h3>coming soon</h3><p>more little worlds on the way…</p></div>';
+}
+
+/* ---- floating hearts ---- */
+const HEARTS = ["💗","💖","💕","❤️","💘","💞"];
+const bg = $("hearts-bg");
+for (let i = 0; i < 18; i++) {
+  const h = document.createElement("span");
+  h.className = "bg-heart";
+  h.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+  h.style.left = Math.random() * 100 + "%";
+  h.style.fontSize = (14 + Math.random() * 26) + "px";
+  h.style.opacity = (0.25 + Math.random() * 0.4).toFixed(2);
+  h.style.animationDuration = (9 + Math.random() * 14) + "s";
+  h.style.animationDelay = (-Math.random() * 20) + "s";
+  bg.appendChild(h);
+}
+
+/* ---- heart explosion on unlock ---- */
+function burstHearts() {
+  for (let i = 0; i < 26; i++) {
+    const h = document.createElement("span");
+    h.className = "burst-heart";
+    h.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 90 + Math.random() * 190;
+    h.style.setProperty("--tx", Math.cos(angle) * dist + "px");
+    h.style.setProperty("--ty", Math.sin(angle) * dist + "px");
+    h.style.setProperty("--s", (0.6 + Math.random() * 1.2).toFixed(2));
+    h.style.setProperty("--r", (Math.random() * 160 - 80) + "deg");
+    h.style.fontSize = (16 + Math.random() * 20) + "px";
+    h.addEventListener("animationend", () => h.remove());
+    document.body.appendChild(h);
+  }
+}
+</script>
+</body>
+</html>
